@@ -1,3 +1,8 @@
+This is a wrapper of Eigen-NNLS package into webassambly javascript
+
+original code comes from: https://github.com/hmatuschek/eigen3-nnls
+
+
 ## Need to have emscripten installed
 
 ## activate g++
