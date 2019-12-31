@@ -30,4 +30,7 @@ Click on one of the examples.
 
 ![Screenshot](image.png)
 
+
+I make two versions one for float and one for double. Float is faster but depending on your computation and data Double may be usefull too.
+
 Guillaume
