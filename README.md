@@ -32,4 +32,8 @@ Click on one of the examples.
 
 I make two versions one for float and one for double. Float is faster but depending on your computation and data Double may be usefull too.
 
+CAUTION:
+
+It's crutial to free the pointers during each iteration of the loop to avoid memory explosion!
+
 Guillaume
