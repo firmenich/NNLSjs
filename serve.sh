@@ -1,1 +1,1 @@
-emrun --port 8080 web/
+python -m http.server 8080

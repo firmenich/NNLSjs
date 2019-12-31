@@ -2,39 +2,35 @@ This is a wrapper of Eigen-NNLS package into webassambly javascript
 
 original code comes from: https://github.com/hmatuschek/eigen3-nnls
 
-
 ## Need to have emscripten installed
 
-## activate g++
-export PATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:$PATH
-
-## how to compile for c++/g++:
-you will need to change -I path to eigen3 include files based on your installation setup:
-for me it's:
-g++ -o nnls -std=c++11 -I/usr/local/include/eigen3 nnls.cpp
-
 ## activate emb
-echo "source /Users/tgg/Github/emsdk/emsdk_env.sh --build=Release > /dev/null" >> ~/.bashrc
+source /Users/tgg/Github/emsdk/emsdk_env.sh --build=Release
+
 This directory contains the C++ Eigen-NNLS for emscripten.
 
-## how to compile for webasm/js:
-code is already compile if you want to make modification you need to recompile:
-./build.sh
+## how to compile nnls-wrapper.cpp for webasm/js:
+if you need the modify the cpp code, you will need to recompile.
 
-## manual compilation
-you will need to change -I path to eigen3 include files based on your installation setup:
-for me it's:
-run those command lines in a terminal:
-emcc --bind cpp/Deconv.cpp  -std=c++11 -I/usr/local/include/eigen3 -s WASM=1 -o deconv.js
-mv deconv.js web/gen/
-mv deconv.wasm web/gen/
+First update the path to your eigen3 installation path before to compile in the "compile.sh" file & than run this command in the terminal (in this folder):
+
+./compile.sh
+
+is it not working you may need to change the rigths of the the file using "chmod -x compile.sh" command ("for executable file") you will need to have admin privileges.
 
 
-## js example:
-there is a initial example available in nnls.js
+## examples:
+I add severals examples in NNLS.html page. Run this following command in your terminal (again in this folder) 
 
 ./serve.sh
 
-this will open your browser, in the browser console copy paste the full code
+Open your browser at this url "localhost:8080/NNLS.html" & activate your brower console. 
+
+Click on one of the examples.
+
+![Screenshot](image.png)
+
+
+I make two versions one for float and one for double. Float is faster but depending on your computation and data Double may be usefull too.
 
 Guillaume

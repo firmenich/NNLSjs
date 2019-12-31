@@ -1,0 +1,636 @@
+<script src="nnls.js"></script>
+<script>
+
+
+var nnls_doublearray = Module.cwrap("nnls_doublearray", null, ["number", "number", "number", "number", "number"]);
+
+	
+function pressBtn_nnls_case1(){
+
+
+	var input1_array = new Float64Array([ 1,2,3,4,1,4,9,16]); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array([ 0.6, 2.2, 4.8, 8.4]); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// alloc memory for the 2 inputs
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+	var input2_ptr = Module._malloc(d1 * bytes_per_element);
+    // alloc memory for the output
+	var output_ptr = Module._malloc(d2 * bytes_per_element);
+    
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+	nnls_doublearray(input1_ptr, input2_ptr, output_ptr, d1, d2);   
+	var t1bis = performance.now();
+	                       // call the WASM function
+	var output_array = new Float64Array(Module.HEAPF64.buffer, output_ptr, d2); // extract data to another JS array
+	console.log("A :", input1_array);
+	console.log("B :", input2_array);
+	console.log("x :	", output_array);
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output_ptr);
+}
+
+
+function pressBtn_nnls_case2(){
+
+
+	var input1_array = new Float64Array([1,2,3,4,1,4,9,16,1,8,27,64]); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array([0.13, 0.84, 2.91, 7.12]); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// alloc memory for the 2 inputs
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+	var input2_ptr = Module._malloc(d1 * bytes_per_element);
+    // alloc memory for the output
+	var output_ptr = Module._malloc(d2 * bytes_per_element);
+    
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+	nnls_doublearray(input1_ptr, input2_ptr, output_ptr, d1, d2);   
+	var t1bis = performance.now();
+	                       // call the WASM function
+	var output_array = new Float64Array(Module.HEAPF64.buffer, output_ptr, d2); // extract data to another JS array
+	console.log("A :", input1_array);
+	console.log("B :", input2_array);
+	console.log("x :	", output_array);
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output_ptr);
+}
+
+
+function pressBtn_nnls_case3(){
+
+
+	var input1_array = new Float64Array([1,2,3,4,1,4,9,16,1,8,27,64]); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array([0.23, 1.24, 3.81, 8.72]); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// alloc memory for the 2 inputs
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+	var input2_ptr = Module._malloc(d1 * bytes_per_element);
+    // alloc memory for the output
+	var output_ptr = Module._malloc(d2 * bytes_per_element);
+    
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+	nnls_doublearray(input1_ptr, input2_ptr, output_ptr, d1, d2);   
+	var t1bis = performance.now();
+	                       // call the WASM function
+	var output_array = new Float64Array(Module.HEAPF64.buffer, output_ptr, d2); // extract data to another JS array
+	console.log("A :", input1_array);
+	console.log("B :", input2_array);
+	console.log("x :	", output_array);
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output_ptr);
+}
+
+
+function pressBtn_nnls_case4(){
+
+
+	var input1_array = new Float64Array([1,2,3,4,1,4,9,16,1,8,27,64,1,16,81,256]); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array([0.73, 3.24, 8.31, 16.72]); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// alloc memory for the 2 inputs
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+	var input2_ptr = Module._malloc(d1 * bytes_per_element);
+    // alloc memory for the output
+	var output_ptr = Module._malloc(d2 * bytes_per_element);
+    
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+	nnls_doublearray(input1_ptr, input2_ptr, output_ptr, d1, d2);   
+	var t1bis = performance.now();
+	                       // call the WASM function
+	var output_array = new Float64Array(Module.HEAPF64.buffer, output_ptr, d2); // extract data to another JS array
+	console.log("A :", input1_array);
+	console.log("B :", input2_array);
+	console.log("x :	", output_array);
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output_ptr);
+}
+
+
+function pressBtn_nnls_case5(){
+
+	var A = [];
+	for (var i=0, t=160; i<t; i++) {
+    	A.push(Math.round(Math.random() * t))
+	}
+
+	var b = [];
+	for (var i=0, t=20; i<t; i++) {
+    	b.push(Math.round(Math.random() * t))
+	}
+
+	var input1_array = new Float64Array(A); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array(b); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// alloc memory for the 2 inputs
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+	var input2_ptr = Module._malloc(d1 * bytes_per_element);
+    // alloc memory for the output
+	var output_ptr = Module._malloc(d2 * bytes_per_element);
+    
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+	nnls_doublearray(input1_ptr, input2_ptr, output_ptr, d1, d2);   
+	var t1bis = performance.now();
+	                       // call the WASM function
+	var output_array = new Float64Array(Module.HEAPF64.buffer, output_ptr, d2); // extract data to another JS array
+	console.log("A :", input1_array);
+	console.log("B :", input2_array);
+	console.log("x :	", output_array);
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output_ptr);
+}
+
+
+
+function pressBtn_nnls_b1b2(){
+
+	var A = [];
+	for (var i=0, t=1600; i<t; i++) {
+    	A.push(Math.round(Math.random() * t))
+	}
+
+	var b1 = [];
+	for (var i=0, t=40; i<t; i++) {
+    	b1.push(Math.round(Math.random() * t))
+	}
+
+
+
+	var input1_array = new Float64Array(A); // array of 32-bit signed int to pass
+	var input2_array = new Float64Array(b1); //  array of 32-bit signed int to pass
+
+    var t0 = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d/d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// A matrix setting
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+
+	Module.HEAPF64.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+    /// first b run:
+    var input2_ptr = Module._malloc(d1 * bytes_per_element);
+
+	Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+    var t0bis = performance.now();
+
+    // alloc memory for the output
+	var output1_ptr = Module._malloc(d2 * bytes_per_element);
+	// call the WASM function
+    
+	nnls_doublearray(input1_ptr, input2_ptr, output1_ptr, d1, d2);   
+	var t1bis = performance.now();
+	// get back results
+	var output_array1 = new Float64Array(Module.HEAPF64.buffer, output1_ptr, d2); // extract data to another JS array
+	
+
+	/// second b run:
+	var b2 = [];
+
+	for (var j=0; j<1000; j++) {
+		
+		for (var i=0, t=40; i<t; i++) {
+	    	b2.push(Math.round(Math.random() * t))
+		}
+
+    	var input2_array = new Float64Array(b2); //  array of 32-bit signed int to pass
+
+		Module.HEAPF64.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+		var output2_ptr = Module._malloc(d2 * bytes_per_element);
+		// call the WASM function
+
+		nnls_doublearray(input1_ptr, input2_ptr, output2_ptr, d1, d2);  
+		// get back results
+
+		var output_array2 = new Float64Array(Module.HEAPF64.buffer, output2_ptr, d2); // extract data to another JS array
+
+	}
+
+	var t1bis = performance.now();
+
+
+	console.log("A :", input1_array);
+	console.log("x1 :	", output_array1);
+	console.log("x2 :	", output_array2);
+
+    var t1 = performance.now();
+    console.log("All C++ took " + (t1 - t0) + " milliseconds.");
+    console.log("function runtime C++ took " + (t1bis - t0bis) + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+	Module._free(input2_ptr);
+	Module._free(output2_ptr);
+	Module._free(output1_ptr);
+
+}
+
+var nnls_floatarray = Module.cwrap("nnls_floatarray", null, ["number", "number", "number", "number", "number"]);
+
+function pressBtn_nnls_b1b2_float(){
+
+	var A = [];
+	for (var i=0, t=36000; i<t; i++) {
+    	A.push(Math.round(Math.random() * t))
+	}
+
+	var b1 = [];
+	for (var i=0, t=100; i<t; i++) {
+    	b1.push(Math.round(Math.random() * t))
+	}
+
+	var input1_array = new Float32Array(A); // array of 32-bit signed int to pass
+	var input2_array = new Float32Array(b1); //  array of 32-bit signed int to pass
+
+    var ta = performance.now();
+
+	var d = input1_array.length;					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d / d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// A matrix setting
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+
+	Module.HEAPF32.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+    var ta = performance.now()-ta;
+
+	var tb = 0;
+	var tr = 0;
+	var tc = 0;
+	/// second b run:
+	var b2 = [];
+
+
+	for (var i=0, t=100; i<t; i++) {
+	    	b2.push(Math.round(Math.random() * t))
+	}
+
+	for (var j=0; j<360; j++) {
+		
+	
+
+    	var input2_array = new Float32Array(b2); //  array of 32-bit signed int to pass
+	    var input2_ptr = Module._malloc(d * bytes_per_element);
+
+		Module.HEAPF32.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+		var output_ptr = Module._malloc(d2 * bytes_per_element);
+		// call the WASM function
+	    var tcl = performance.now();
+
+		nnls_floatarray(input1_ptr, input2_ptr, output_ptr, d1, d2);  
+		// get back results
+		tc += performance.now()-tcl;
+
+		var output_array = new Float32Array(Module.HEAPF32.buffer, output_ptr, d2); // extract data to another JS array
+
+		Module._free(input2_ptr);
+	    Module._free(output_ptr);
+
+	}
+
+
+    console.log("memory 1 :" + ta+tb + " milliseconds.");
+    console.log("nnls runtime C++ took " + tc + " milliseconds.");
+    console.log("memory 2 :" + tr + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+
+}
+
+
+function pressBtn_nnls_test(){
+
+
+	let MethylSal=[14,10,15,120,25,10,26,30,27,80,29,180,30,50,31,70,32,10,36,10,37,170,38,460,39,1610,40,60,41,50,42,30,43,20,44,10,45,70,46,40,49,50,50,280,51,220,52,110,53,810,54,60,55,80,59,70,60,30,61,200,62,480,63,1550,64,1490,65,2250,66,290,67,50,68,20,69,30,73,40,74,160,75,110,76,150,77,140,78,20,79,40,80,40,81,170,82,10,89,10,90,20,91,120,92,6889,93,1450,94,110,95,80,96,10,104,20,105,20,107,10,108,30,109,50,120,9999,121,3110,122,250,123,30,135,10,136,20,137,90,138,10,152,4680,153,420,154,50];
+
+    let EHSal=[26,10,27,179,28,90,29,589,30,10,31,10,38,20,39,389,40,40,41,1399,42,299,43,2489,44,90,50,10,51,20,53,99,54,50,55,1389,56,719,57,3459,58,149,59,10,62,10,63,90,64,129,65,689,66,50,67,70,68,60,69,669,70,3049,71,2409,72,139,75,10,76,10,77,20,79,10,81,40,82,199,83,1889,84,749,85,60,91,20,92,599,93,659,94,90,95,10,97,99,98,20,109,10,111,10,112,2249,113,269,114,10,119,10,120,9999,121,3869,122,329,123,20,134,10,137,20,138,8569,139,1459,140,129,141,10,151,10,250,1169,251,199,252,20];
+
+    let m = new Array(2);  // initialize array of rows
+    for (var r = 0; r < 2; ++r) {
+	    m[r] = new Array(252); 
+	    for (var c = 0; c < 252; ++c) {
+	      m[r][c] = 0;   
+	    }
+	}
+
+	for (var p = 0; p< MethylSal.length; p=p+2) {
+		m[0][MethylSal[p]]=MethylSal[p+1];
+	}
+	 
+	for (var p = 0; p< EHSal.length; p=p+2) {
+		m[1][EHSal[p]]=EHSal[p+1];
+	}  
+ 
+	let MS = m; 
+
+	let k = 100;
+
+	let C = [
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0001 ,0.0000 ],
+	[0.0001 ,0.0000 ],
+	[0.0002 ,0.0000 ],
+	[0.0005 ,0.0000 ],
+	[0.0009 ,0.0000 ],
+	[0.0016 ,0.0000 ],
+	[0.0027 ,0.0000 ],
+	[0.0045 ,0.0000 ],
+	[0.0071 ,0.0000 ],
+	[0.0108 ,0.0000 ],
+	[0.0158 ,0.0000 ],
+	[0.0222 ,0.0000 ],
+	[0.0299 ,0.0000 ],
+	[0.0388 ,0.0000 ],
+	[0.0484 ,0.0000 ],
+	[0.0579 ,0.0000 ],
+	[0.0666 ,0.0000 ],
+	[0.0737 ,0.0000 ],
+	[0.0782 ,0.0000 ],
+	[0.0798 ,0.0002 ],
+	[0.0782 ,0.0006 ],
+	[0.0737 ,0.0021 ],
+	[0.0666 ,0.0059 ],
+	[0.0579 ,0.0152 ],
+	[0.0484 ,0.0350 ],
+	[0.0388 ,0.0720 ],
+	[0.0299 ,0.1326 ],
+	[0.0222 ,0.2187 ],
+	[0.0158 ,0.3226 ],
+	[0.0108 ,0.4259 ],
+	[0.0071 ,0.5032 ],
+	[0.0045 ,0.5319 ],
+	[0.0027 ,0.5032 ],
+	[0.0016 ,0.4259 ],
+	[0.0009 ,0.3226 ],
+	[0.0005 ,0.2187 ],
+	[0.0002 ,0.1326 ],
+	[0.0001 ,0.0720 ],
+	[0.0001 ,0.0350 ],
+	[0.0000 ,0.0152 ],
+	[0.0000 ,0.0059 ],
+	[0.0000 ,0.0021 ],
+	[0.0000 ,0.0006 ],
+	[0.0000 ,0.0002 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ],
+	[0.0000 ,0.0000 ]];
+
+	function multiply(a, b) {
+	  var aNumRows = a.length, aNumCols = a[0].length,
+	      bNumRows = b.length, bNumCols = b[0].length,
+	      m = new Array(aNumRows);  // initialize array of rows
+	  for (var r = 0; r < aNumRows; ++r) {
+	    m[r] = new Array(bNumCols); // initialize the current row
+	    for (var c = 0; c < bNumCols; ++c) {
+	      m[r][c] = 0;             // initialize the current cell
+	      for (var i = 0; i < aNumCols; ++i) {
+	        m[r][c] += k * a[r][i] * b[i][c];
+	      }
+	    }
+	  }
+	  return m;
+	}
+
+
+	function flatten(matrix){
+		var flat = [];
+		for(var j=0; j< matrix[0].length; j++) {
+			for(var i=0; i<matrix.length; i++){
+	        	flat.push(k*matrix[i][j]);
+	    	}
+		}
+		return flat;
+	}
+
+	function getCol(matrix, col){
+	    var column = [];
+	    for(var i=0; i<matrix.length; i++){
+	        column.push(matrix[i][col]);
+	    }
+	    return column;
+	}
+
+    // prepare the matrix 
+    let A = multiply(C,MS);
+
+    var input1_array = new Float32Array(flatten(C)); // array of 32-bit signed int to pass
+	var input2_array = new Float32Array(getCol(A,0)); //  array of 32-bit signed int to pass
+
+    var ta = performance.now();
+	var tc = 0;
+
+	var d = input1_array.length;
+	console.log(d);					         // 5 elements
+	var d1 = input2_array.length;
+	var d2 = d / d1;					         // 5 elements
+
+	var bytes_per_element = input1_array.BYTES_PER_ELEMENT;   // 4 bytes each element
+    
+	// A matrix setting
+	var input1_ptr = Module._malloc(d * bytes_per_element);
+
+	Module.HEAPF32.set(input1_array, input1_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+	var tb = 0;
+	var tr = 0;
+	/// second b run:
+    var res = [];
+
+	for (var j=0; j<A[0].length; j++) {
+		
+		//console.log(j);
+    	var input2_array = new Float32Array(getCol(A,j)); //  array of 32-bit signed int to pass
+    	//if (j==56) 	{	console.log(input2_array); console.log(input1_array);}
+
+	    var input2_ptr = Module._malloc(d * bytes_per_element);
+
+		Module.HEAPF32.set(input2_array, input2_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array, (see below for details)
+
+		var output_ptr = Module._malloc(d2 * bytes_per_element);
+		// call the WASM function
+	    var tcl = performance.now();
+
+		nnls_floatarray(input1_ptr, input2_ptr, output_ptr, d1, d2);  
+		// get back results
+		tc += performance.now()-tcl;
+
+		var output_array = new Float32Array(Module.HEAPF32.buffer, output_ptr, d2); // extract data to another JS array
+		for (var i = 0; i< output_array.length; i++)
+		{
+	    	res.push(output_array[i]);
+		}
+		Module._free(input2_ptr);
+	    Module._free(output_ptr);
+
+
+	}
+    var ta = performance.now()-ta;
+	console.log("A :", A);
+
+	console.log("MS:", MS);
+
+	console.log("res :", res);
+	console.log("res size :", res.length/2);
+
+    console.log("full :" + ta+tb + " milliseconds.");
+    console.log("nnls runtime C++ took " + tc + " milliseconds.");
+    console.log("memory 2 :" + tr + " milliseconds.");
+	// dealloc memory
+	Module._free(input1_ptr);
+
+}
+
+
+</script>
+
+
+<button onclick="pressBtn_nnls_case1()">case 1 NNLS Ax = b</button>
+<p><button onclick="pressBtn_nnls_case2()">case 2 NNLS Ax = b</button></p>
+<p><button onclick="pressBtn_nnls_case3()">case 3 NNLS Ax = b</button></p>
+<p><button onclick="pressBtn_nnls_case4()">case 4 NNLS Ax = b</button></p>
+<p><button onclick="pressBtn_nnls_case5()">case 5 NNLS Ax = b</button></p>
+<p><button onclick="pressBtn_nnls_b1b2()">case 6 NNLS Ax = b loop double</button></p>
+<p><button onclick="pressBtn_nnls_b1b2_float()">case 7 NNLS Ax = b loop float</button></p>
+<p><button onclick="pressBtn_nnls_test()">case 8 Real case float</button></p>
+
+
+
+<p>Open the console to see the result!</p>
