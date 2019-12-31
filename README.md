@@ -16,8 +16,7 @@ First update the path to your eigen3 installation path before to compile in the 
 
 ./compile.sh
 
-is it not working you may need to change the rigths of the the file using "chmod -x compile.sh" command ("for executable file") you will need to have admin privileges.
-
+you may need to change file rigths using this command "chmod -x compile.sh" ("for executable file") but you will need to have admin privileges.
 
 ## examples:
 I add severals examples in NNLS.html page. Run this following command in your terminal (again in this folder) 
