@@ -1,0 +1,2 @@
+emcc -O3 nnls-wrapper.cpp  -std=c++11 -I/usr/local/include/eigen3  -o nnls.js -s WASM=1 -s EXPORTED_FUNCTIONS='["_nnls_floatarray","_nnls_doublearray","_free","_malloc"]' -s ASSERTIONS=1 -s ALLOW_MEMORY_GROWTH=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "getValue", "setValue"]'  -s ABORTING_MALLOC=0
+./serve.sh
