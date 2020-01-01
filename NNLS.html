@@ -1,4 +1,9 @@
-<script src="nnls.js"></script>
+
+<head>
+	<script src="plotly.min.js"></script>
+	<script src="nnls.js"></script>
+</head>
+
 <script>
 
 
@@ -393,8 +398,8 @@ function pressBtn_nnls_test(){
 
     let m = new Array(2);  // initialize array of rows
     for (var r = 0; r < 2; ++r) {
-	    m[r] = new Array(252); 
-	    for (var c = 0; c < 252; ++c) {
+	    m[r] = new Array(253); 
+	    for (var c = 0; c < 253; ++c) {
 	      m[r][c] = 0;   
 	    }
 	}
@@ -529,7 +534,6 @@ function pressBtn_nnls_test(){
 	  return m;
 	}
 
-
 	function flatten(matrix){
 		var flat = [];
 		for(var j=0; j< matrix[0].length; j++) {
@@ -540,6 +544,18 @@ function pressBtn_nnls_test(){
 		return flat;
 	}
 
+    // col 1 = 0,2,4......, n/2 / col 2 = 1,3,5,....
+	function reshape(vector,nrows,ncols){
+		var  m = new Array(nrows);  // initialize array of rows
+		for (var r = 0; r < nrows; ++r) {
+	    m[r] = new Array(ncols); // initialize the current row
+	    for (var c = 0; c < ncols; ++c) {
+	      m[r][c] = Math.round(vector[r*ncols+c]);             
+	    }
+	  }
+	  return m;
+	}
+
 	function getCol(matrix, col){
 	    var column = [];
 	    for(var i=0; i<matrix.length; i++){
@@ -548,7 +564,17 @@ function pressBtn_nnls_test(){
 	    return column;
 	}
 
+	function getIndex(matrix){
+	    var column = [];
+	    for(var i=0; i<matrix.length; i++){
+	        column.push(i);
+	    }
+	    return column;
+	}
+
     // prepare the matrix 
+    console.log(C.length);
+
     let A = multiply(C,MS);
 
     var input1_array = new Float32Array(flatten(C)); // array of 32-bit signed int to pass
@@ -593,6 +619,7 @@ function pressBtn_nnls_test(){
 		tc += performance.now()-tcl;
 
 		var output_array = new Float32Array(Module.HEAPF32.buffer, output_ptr, d2); // extract data to another JS array
+		
 		for (var i = 0; i< output_array.length; i++)
 		{
 	    	res.push(output_array[i]);
@@ -607,8 +634,12 @@ function pressBtn_nnls_test(){
 
 	console.log("MS:", MS);
 
+
 	console.log("res :", res);
-	console.log("res size :", res.length/2);
+
+    let R = reshape(res,res.length/2,2); 
+
+	console.log("res mat :", R);
 
     console.log("full :" + ta+tb + " milliseconds.");
     console.log("nnls runtime C++ took " + tc + " milliseconds.");
@@ -616,7 +647,21 @@ function pressBtn_nnls_test(){
 	// dealloc memory
 	Module._free(input1_ptr);
 
+
+	TESTER = document.getElementById('tester');
+	Plotly.plot( TESTER, [{
+	x: getIndex(C),
+	y: getCol(C,0) },
+	{
+	x: getIndex(C),
+	y: getCol(C,1)
+	}], {
+	margin: { t: 0 } } );
+
+
 }
+
+
 
 
 </script>
@@ -631,6 +676,8 @@ function pressBtn_nnls_test(){
 <p><button onclick="pressBtn_nnls_b1b2_float()">case 7 NNLS Ax = b loop float</button></p>
 <p><button onclick="pressBtn_nnls_test()">case 8 Real case float</button></p>
 
+
+<div id="tester" style="width:600px;height:250px;"></div>
 
 
 <p>Open the console to see the result!</p>
