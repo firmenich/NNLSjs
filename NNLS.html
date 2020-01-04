@@ -534,6 +534,22 @@ function pressBtn_nnls_test(){
 	  return m;
 	}
 
+	function multiplyV(a, b) {
+	  var aNumRows = a.length,
+	      bNumRows = b.length,
+	      m = new Array(aNumRows);  // initialize array of rows
+	  for (var r = 0; r < aNumRows; ++r) {
+	    m[r] = new Array(bNumRows); // initialize the current row
+	    for (var c = 0; c < bNumRows; ++c) {
+	      m[r][c] = 0;             // initialize the current cell
+	      m[r][c] += k * a[r] * b[c];
+	    }
+	  }
+	  return m;
+	}
+
+
+
 	function flatten(matrix){
 		var flat = [];
 		for(var j=0; j< matrix[0].length; j++) {
@@ -556,10 +572,58 @@ function pressBtn_nnls_test(){
 	  return m;
 	}
 
+
+	function getSum(matrix, axes){
+		if (axes == 0)	{
+			nrows = matrix.length;
+			ncols = matrix[0].length;
+			var  m = new Array(nrows);  
+			for (var r = 0; r < nrows; ++r) {
+				m[r] = 0;
+	    		for (var c = 0; c < ncols; ++c) {
+	      			m[r] += matrix[r][c];             
+	    		}
+			}
+		}
+		else {
+			nrows = matrix[0].length;
+			ncols = matrix.length;
+			var  m = new Array(nrows);  
+			for (var r = 0; r < nrows; ++r) {
+				m[r] = 0;
+	    		for (var c = 0; c < ncols; ++c) {
+	      			m[r] += matrix[c][r];             
+	    		}
+			}
+
+		}
+		return m;
+	}
+
+
+	function getSumV(v){
+			nrows = v.length;
+			m = 0;
+	    	for (var c = 0; c < nrows; ++c) {
+	      		m += v[c];             
+	    	}
+		    return m;
+	}
+
+
 	function getCol(matrix, col){
 	    var column = [];
 	    for(var i=0; i<matrix.length; i++){
 	        column.push(matrix[i][col]);
+	    }
+	    return column;
+	}
+
+
+	function getRow(matrix, row){
+	    var column = [];
+	    for(var i=0; i<matrix[0].length; i++){
+	        column.push(matrix[row][i]);
 	    }
 	    return column;
 	}
@@ -630,43 +694,133 @@ function pressBtn_nnls_test(){
 
 	}
     var ta = performance.now()-ta;
-	console.log("A :", A);
-
-	console.log("MS:", MS);
 
 
-	console.log("res :", res);
+    let R = reshape(res,res.length/2,2);
 
-    let R = reshape(res,res.length/2,2); 
+    // compute the sum of the total signal
+    let S0 = getSum(A, 0); // 100 outputs
+    TOTALarea = getSumV(S0);
 
+
+    // compute the sum of each component
+
+    A1 = multiplyV(getCol(R,0), getCol(C,0));
+    sA1 = getSum(A1,1);
+    area1 = getSumV(sA1);
+
+    A2 = multiplyV(getCol(R,1), getCol(C,1));
+    sA2 = getSum(A2,1);
+    area2 = getSumV(sA2);
+
+    let c1 = getSumV(getCol(C,0));
+    let c2 = getSumV(getCol(C,1));
+    // WRONG AREA DISTRIBUTION BASED ON ions 1 and 2 proportions:
+
+    console.log('ION COMPONENT 1 PCT:'+c1/(c1+c2)*100); // ion 1
+    console.log('ION COMPONENT 2 PCT:'+c2/(c1+c2)*100); // ion 2
+
+
+    // REAL AREA DISTRIBUTION PER COMPONENT:
+    console.log('True Molecule 1 PCT:'+area1/TOTALarea*100);
+    console.log('True Molecule 2 PCT:'+area2/TOTALarea*100);
+
+    // show results:
 	console.log("res mat :", R);
+	console.log("mes mat :", MS);
 
+	// show performance
     console.log("full :" + ta+tb + " milliseconds.");
     console.log("nnls runtime C++ took " + tc + " milliseconds.");
     console.log("memory 2 :" + tr + " milliseconds.");
 	// dealloc memory
 	Module._free(input1_ptr);
 
-
-	TESTER = document.getElementById('tester');
-	Plotly.plot( TESTER, [{
+	// visualizing data
+	COMP = document.getElementById('comp');
+	Plotly.plot( COMP, [{
 	x: getIndex(C),
 	y: getCol(C,0) },
 	{
 	x: getIndex(C),
 	y: getCol(C,1)
 	}], {
-	margin: { t: 0 } } );
+	title: 'Components', margin: { t: -10 }  } );
 
+	SUM = document.getElementById('sum');
+	Plotly.plot(SUM, [{
+	x: getIndex(S0),
+	y: S0 },{
+	x: getIndex(sA1),
+	y: sA1 },{
+	x: getIndex(sA2),
+	y: sA2 }], 
+	{
+  	title: 'TIC of signals and reconstitution', margin: { t: -10 } } );
+	  
+	var z_data=[ ]
+	for(i=0;i<A[0].length;i++)
+	{
+	  z_data.push(getCol(A,i));
+	}
+
+	MAT = document.getElementById('mat');
+	Plotly.plot( MAT, 
+		[{z : z_data,
+			type: 'surface'}],
+	{
+  	title: 'Signal A = C*MS',
+  	xaxis: { 'title' : "m/z" },
+  	yaxis: { 'title': "scan time" },
+  	autosize: false,
+ 	 margin: {
+  	  l: 65,  r: 50,   b: 65,  t: 90 }	}
+	);
+
+	var z_data_1=[ ]
+	for(i=0;i<A1.length;i++)
+	{
+	  z_data_1.push(getRow(A1,i));
+	}
+
+	var z_data_2=[ ]
+	for(i=0;i<A2.length;i++)
+	{
+	  z_data_2.push(getRow(A2,i));
+	}
+
+	MAT_1 = document.getElementById('mat_1');
+	Plotly.plot( MAT_1, 
+		[{z : z_data_1,
+			type: 'surface'}],
+	{
+  	title: 'Found Composant A1',
+  	xaxis: { 'title' : "m/z" },
+  	yaxis: { 'title': "scan time" },
+  	autosize: false,
+ 	 margin: {
+  	  l: 65,  r: 50,   b: 65,  t: 90 }	}
+	);
+
+	MAT_2 = document.getElementById('mat_2');
+	Plotly.plot( MAT_2, 
+		[{z : z_data_2,
+			type: 'surface'}],
+	{
+  	title: 'Found Composant A2',
+  	xaxis: { 'title' : "m/z" },
+  	yaxis: { 'title': "scan time" },
+  	autosize: false,
+ 	 margin: {
+  	  l: 65,  r: 50,   b: 65,  t: 90 }	}
+	);
 
 }
 
 
-
-
 </script>
 
-
+<p>Open the console to see the result!</p>
 <button onclick="pressBtn_nnls_case1()">case 1 NNLS Ax = b</button>
 <p><button onclick="pressBtn_nnls_case2()">case 2 NNLS Ax = b</button></p>
 <p><button onclick="pressBtn_nnls_case3()">case 3 NNLS Ax = b</button></p>
@@ -676,8 +830,9 @@ function pressBtn_nnls_test(){
 <p><button onclick="pressBtn_nnls_b1b2_float()">case 7 NNLS Ax = b loop float</button></p>
 <p><button onclick="pressBtn_nnls_test()">case 8 Real case float</button></p>
 
+<div id="comp" style="width:600px;height:400px;"></div>
+<div id="sum" style="width:600px;height:400px;"></div>
+<div id="mat" style="width:600px;height:600px;"></div>
+<div id="mat_1" style="width:600px;height:600px;"></div>
+<div id="mat_2" style="width:600px;height:600px;"></div>
 
-<div id="tester" style="width:600px;height:250px;"></div>
-
-
-<p>Open the console to see the result!</p>
